@@ -1,3 +1,5 @@
+// Home version -- connect to Digital Ocean Using keys
+
 // Adapted from
 // https://ourcodeworld.com/articles/read/133/how-to-create-a-sftp-client-with-node-js-ssh2-in-electron-framework
 
@@ -6,18 +8,22 @@
 // node rwd-ssh2.js r  localpath.txt    remotepath.txt
 // To upload a file:    
 // node rwd-ssh2.js w  localpath.txt    remotepath.txt
-require('dotenv').config(); // get environmental variables
 
+require('dotenv').config(); // get environmental variables
 
 const Client = require('ssh2').Client;
 const remotePathToList = '/Development/';
+let whichDir = "./inbox";
 const connSettings = {
-     host: process.env.OFFSUP_HOST,
+     host: process.env.EVAN_HOST,
      port: 22, // Normal is 22 port
-     username: process.env.OFFSUP_USER,
-     password: process.env.OFFSUP_PASS,
+     username: process.env.EVAN_USER,
+     passphrase: process.env.EVAN_PASSPHRASE,
+     privateKey: require('fs').readFileSync(process.env.EVAN_KEY),
      // You can use a key file too, read the ssh2 documentation
 };
+
+
 
 const conn = new Client();
 if ('undefined' === process.argv[2] || !['r', 'w'].includes(process.argv[2]) ){
@@ -31,8 +37,7 @@ case 'd':
     console.log(`Hello ${process.env.OFFSUP_USER}...`);
 
     conn.on('ready', function() {
-        let whichDir = "/Development/";
-        console.log('Client :: ready, especially with this password [' + process.env.FTP_PASSWORD + ']');
+        console.log('Client :: ready, especially for Mister [' + process.env.EVAN_USER + ']');
         conn.sftp(function(err, sftp) {            
             if (err) throw err;
             sftp.readdir(whichDir, function(err, list) {
@@ -54,7 +59,7 @@ case 'w':
          conn.sftp(function(err, sftp) {
             if (err) throw err;
             console.log(`Hello ${process.env.OFFSUP_USER}...`);
-            distalpath = '/Development/' + process.argv[4];  
+            distalpath = whichDir + process.argv[4];  
             localpath = process.argv[3];
             console.log(`Get from ${localpath}...`);
             console.log(`Write to ${distalpath}...`);
@@ -86,7 +91,7 @@ case 'r':
     conn.on('ready', function() {
         conn.sftp(function(err, sftp) {
             if (err) throw err;
-            distalpath = '/Development/' + process.argv[4];  
+            distalpath = whichDir + process.argv[4];  
             localpath = process.argv[3];
             console.log(`Download.\nGet from ${distalpath}...`);
             console.log(`Write to ${localpath}...`);
