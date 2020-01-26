@@ -43,14 +43,18 @@ case 'd':
                 // List the directory in the console
                 console.log(`Length of filesarray is [${list.length -1}] and type is ${typeof list}.`);
                 console.dir(Object.keys(list) );
-                for (let i = list.length -1, stringI = '', todo1 = 16; i >= 0; i--){
+                for (let i = list.length -1, stringI = '', d = new Date(); i >= 0; i--){
                     console.log('NUMBER ' + i + '___');
                     // console.log(`By the way, type of your index [` + i + `] is ${typeof i} and type of your TODO1 [$todo1] is ${typeof todo1}`);
                     // console.log(`Are todo1 [${todo1}] and i [${i}] deeply identical? Result [${todo1 === i}]`);
                     // console.log(`Are todo1 [${todo1}] and i [${i}] coercively truthy-similar? Result [${todo1 == i}]`);
                     // // console.dir(list[todo1]);
                     // console.log('WITH TODO1: mdate ' + list[todo1].attrs.mtime + ' & filename: ' + list[todo1].filename );
-                    console.log('WITH i: mdate ' + Date(list[i].attrs.mtime) + ' & filename: ' + list[i].filename );
+                    d = Date(list[i].attrs.mtime);
+                    const regex1 = /\w+\ \d+\ \d+\ \d+:\d+:\d+/i
+                    d = regex1.exec(d);
+                    console.log(typeof d + " is the type.");
+                    console.log(    d + '      ' + list[i].filename );
 
                 }
                 // Do not forget to close the connection, otherwise you'll get troubles
