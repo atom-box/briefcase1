@@ -34,8 +34,6 @@ switch (process.argv[2]) {
 
 /////////////////////////////////////////////////////////////
 case 'd': 
-    console.log(`Hello ${process.env.OFFSUP_USER}...`);
-
     conn.on('ready', function() {
         console.log('Client :: ready, especially for Mister [' + process.env.EVAN_USER + ']');
         conn.sftp(function(err, sftp) {            
@@ -43,11 +41,22 @@ case 'd':
             sftp.readdir(whichDir, function(err, list) {
                 if (err) throw err;
                 // List the directory in the console
-                console.dir(list);
+                console.log(`Length of filesarray is [${list.length -1}] and type is ${typeof list}.`);
+                console.dir(Object.keys(list) );
+                for (let i = list.length -1, stringI = '', todo1 = 16; i >= 0; i--){
+                    console.log('NUMBER ' + i + '___');
+                    // console.log(`By the way, type of your index [` + i + `] is ${typeof i} and type of your TODO1 [$todo1] is ${typeof todo1}`);
+                    // console.log(`Are todo1 [${todo1}] and i [${i}] deeply identical? Result [${todo1 === i}]`);
+                    // console.log(`Are todo1 [${todo1}] and i [${i}] coercively truthy-similar? Result [${todo1 == i}]`);
+                    // // console.dir(list[todo1]);
+                    // console.log('WITH TODO1: mdate ' + list[todo1].attrs.mtime + ' & filename: ' + list[todo1].filename );
+                    console.log('WITH i: mdate ' + Date(list[i].attrs.mtime) + ' & filename: ' + list[i].filename );
+
+                }
                 // Do not forget to close the connection, otherwise you'll get troubles
                 conn.end();
             });
-                console.log(`...Ta Ta ${process.env.OFFSUP_USER}.`);
+                console.log(`...Ta Ta ${process.env.EVAN_USER}.`);
         });
     }).connect(connSettings);
     break;
@@ -58,7 +67,7 @@ case 'w':
     conn.on('ready', () => {
          conn.sftp(function(err, sftp) {
             if (err) throw err;
-            console.log(`Hello ${process.env.OFFSUP_USER}...`);
+            console.log(`Hello ${process.env.EVAN_USER}...`);
             distalpath = whichDir + process.argv[4];  
             localpath = process.argv[3];
             console.log(`Get from ${localpath}...`);
